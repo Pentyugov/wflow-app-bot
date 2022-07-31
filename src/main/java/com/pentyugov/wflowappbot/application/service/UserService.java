@@ -13,4 +13,7 @@ public interface UserService {
     void loginUserInService(User user, Chat chat, String username);
     boolean checkVerificationCode(User user, String code);
     boolean isUserLoggedIn(User user);
+
+    boolean isUserLoggedIn(Long userId);
+
 }

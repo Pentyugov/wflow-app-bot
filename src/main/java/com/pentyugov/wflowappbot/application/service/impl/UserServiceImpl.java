@@ -101,5 +101,11 @@ public class UserServiceImpl implements UserService {
         return this.users.stream().anyMatch(u -> Objects.equals(u.getTelUserId(), user.getId()));
     }
 
+    @Override
+    public boolean isUserLoggedIn(Long userId) {
+        loadLoggedUsers();
+        return this.users.stream().anyMatch(u -> Objects.equals(u.getTelUserId(), userId));
+    }
+
 
 }

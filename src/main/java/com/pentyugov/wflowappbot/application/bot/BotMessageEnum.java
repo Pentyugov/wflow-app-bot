@@ -35,6 +35,12 @@ public enum BotMessageEnum {
     EXCEPTION_LOGIN("\u26D4 Что то пошло не так\n" +
             "Обратитесь к администратору системы"),
 
+    TEMPLATE_TASK_OVERDUE("❌ Задача № $number просрочена!\n\n" +
+            "\uD83D\uDCCA Приоритет: $priority \n\n" +
+            "\uD83D\uDCC1 Проект: $project \n\n" +
+            "\uD83D\uDCC5 Срок выполнения: $dueDate \n\n" +
+            "\uD83D\uDCDD Описание: $description "),
+
     HELP_MESSAGE("\uD83D\uDC4B Привет, я бот помощник системы Wflow-app\n\n" +
             "❗ *Что я умею делать делать:*\n\n" +
             "✅ Получать уведомления о назначенных Вам задачах\n\n" +
