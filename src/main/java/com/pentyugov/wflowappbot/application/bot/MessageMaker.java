@@ -5,6 +5,7 @@ import com.pentyugov.wflowappbot.application.model.WflowTask;
 import com.pentyugov.wflowappbot.application.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -44,7 +45,7 @@ public class MessageMaker {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         String message = BotMessageEnum.TEMPLATE_TASK_OVERDUE.getMessage()
                 .replace("$number", task.getNumber())
-                .replace("$priority", task.getPriority())
+                .replace("$priority", getPriority(task.getPriority()))
                 .replace("$project", task.getProject() != null ? task.getProject() : " - ")
                 .replace("$dueDate", dateFormat.format(task.getDueDate()))
                 .replace("$description", task.getDescription());
@@ -66,5 +67,16 @@ public class MessageMaker {
             sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
         }
         return sendMessage;
+    }
+
+    private String getPriority(String priority) {
+        if (priority.equals(WflowTask.PRIORITY_LOW))
+            return BotMessageEnum.TASK_PRIORITY_LOW.getMessage();
+        else if (priority.equals(WflowTask.PRIORITY_MEDIUM))
+            return BotMessageEnum.TASK_PRIORITY_MEDIUM.getMessage();
+        else if (priority.equals(WflowTask.PRIORITY_HIGH))
+            return BotMessageEnum.TASK_PRIORITY_HIGH.getMessage();
+
+        return "";
     }
 }

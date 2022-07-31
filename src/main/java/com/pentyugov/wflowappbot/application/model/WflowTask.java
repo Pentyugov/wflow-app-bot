@@ -11,6 +11,10 @@ import java.util.Date;
 @NoArgsConstructor
 public class WflowTask {
 
+    public static final String PRIORITY_LOW = "PRIORITY$LOW";
+    public static final String PRIORITY_MEDIUM = "PRIORITY$MEDIUM";
+    public static final String PRIORITY_HIGH = "PRIORITY$HIGH";
+
     private String number;
     private String description;
     private String priority;

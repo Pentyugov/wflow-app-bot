@@ -50,6 +50,12 @@ public enum BotMessageEnum {
             "\u27A1 Для авторизации под пользователем системы Wflow-app наберите команду:\n /login {логин пользователя системы Wflow-app}\n\n\n" +
             "Воспользуйтесь клавиатурой, чтобы начать работу\uD83D\uDC47"),
 
+    TASK_PRIORITY_LOW("Низкий"),
+
+    TASK_PRIORITY_MEDIUM("Средний"),
+
+    TASK_PRIORITY_HIGH("Высокий"),
+
     CHOOSE_DICTIONARY_MESSAGE("Выберите словарь\uD83D\uDC47 "),
     UPLOAD_DICTIONARY_MESSAGE("Добавьте файл, соответствующий шаблону. Вы можете сделать это в любой момент"),
     NON_COMMAND_MESSAGE("Пожалуйста, воспользуйтесь клавиатурой\uD83D\uDC47"),
