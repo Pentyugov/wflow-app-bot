@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TelegramOverdueTasksResponse {
+public class TelegramTaskSendMessageResponse {
 
     private HttpStatus httpStatus;
 }

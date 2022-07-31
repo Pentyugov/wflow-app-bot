@@ -2,7 +2,7 @@ package com.pentyugov.wflowappbot.application.service.impl;
 
 import com.pentyugov.wflowappbot.application.bot.Bot;
 import com.pentyugov.wflowappbot.application.bot.MessageMaker;
-import com.pentyugov.wflowappbot.application.rest.payload.request.TelegramOverdueTasksRequest;
+import com.pentyugov.wflowappbot.application.rest.payload.request.TelegramTaskSendMessageRequest;
 import com.pentyugov.wflowappbot.application.service.MessageService;
 import com.pentyugov.wflowappbot.application.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +23,25 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void sendTaskOverdueMessage(TelegramOverdueTasksRequest request) {
+    public void sendTaskMessage(TelegramTaskSendMessageRequest request) {
+        if (request.getType().equals(TelegramTaskSendMessageRequest.TYPE_ASSIGNED)) {
+            sendTaskAssignedMessage(request);
+        } else if (request.getType().equals(TelegramTaskSendMessageRequest.TYPE_OVERDUE)) {
+            sendTaskOverdueMessage(request);
+        }
+    }
+
+    private void sendTaskAssignedMessage(TelegramTaskSendMessageRequest request) {
+        if (userService.isUserLoggedIn(request.getTelUserId())) {
+            bot.sendMessage(messageMaker.creatTaskAssignedMessage(request.getTelChatId(), request.getTask()));
+        }
+    }
+
+
+    private void sendTaskOverdueMessage(TelegramTaskSendMessageRequest request) {
         if (userService.isUserLoggedIn(request.getTelUserId())) {
             bot.sendMessage(messageMaker.creatTaskOverdueMessage(request.getTelChatId(), request.getTask()));
         }
     }
+
 }

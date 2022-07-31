@@ -19,5 +19,6 @@ public class WflowTask {
     private String description;
     private String priority;
     private String project;
+    private String comment;
     private Date dueDate;
 }
