@@ -32,7 +32,7 @@ public class TelegramBotConfiguration implements ApplicationListener<ContextRefr
 
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(CHAT_ID.toString());
-            sendMessage.setText("Test message from spring boot application");
+            sendMessage.setText("Wflow-app bot started...");
             bot.sendMessage(sendMessage);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
