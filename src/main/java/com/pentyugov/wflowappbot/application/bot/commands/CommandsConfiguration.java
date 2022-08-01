@@ -17,8 +17,18 @@ public class CommandsConfiguration {
     }
 
     @Bean
+    public LogoutCommand logoutCommand() {
+        return new LogoutCommand("logout", "Выход из системы");
+    }
+
+    @Bean
     public CodeCommand codeCommand() {
         return new CodeCommand("code", "Код верификации");
+    }
+
+    @Bean
+    public HelpCommand helpCommand() {
+        return new HelpCommand("help", "Помощь");
     }
 
 }

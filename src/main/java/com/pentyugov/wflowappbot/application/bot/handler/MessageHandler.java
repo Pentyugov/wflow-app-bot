@@ -18,14 +18,19 @@ public class MessageHandler {
     }
 
     public SendMessage getAnswerMessage(Message message) {
-        SendMessage sendMessage = new SendMessage();
-        String text = message.getText();
+        SendMessage sendMessage;
+        String inputMessage = message.getText();
 
-        if (ButtonNameEnum.HELP_BUTTON.getButtonName().equals(text)) {
-            sendMessage =  messageMaker
-                    .createMessage(message.getFrom(), message.getChat(), BotMessageEnum.HELP_MESSAGE.getMessage());
+        if (ButtonNameEnum.HELP_BUTTON.getButtonName().equals(inputMessage)) {
+            sendMessage = messageMaker.createMessage(message.getFrom(), message.getChat(), BotMessageEnum.HELP_MESSAGE.getMessage());
 
+        } else if (ButtonNameEnum.SETTINGS_BUTTON.getButtonName().equals(inputMessage)) {
+            sendMessage = messageMaker.createSettingsMessage(message.getFrom(), message.getChat());
+
+        } else {
+            sendMessage = messageMaker.createMessage(message.getFrom(), message.getChat(), BotMessageEnum.DEFAULT_WRONG_REQUEST_MESSAGE.getMessage());
         }
+
 
         return sendMessage;
     }

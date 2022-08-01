@@ -3,7 +3,9 @@ package com.pentyugov.wflowappbot.application.bot.keyboard;
 public enum ButtonNameEnum {
     MY_TASKS_BUTTON("Мои задачи"),
     SETTINGS_BUTTON("Настройки"),
-    HELP_BUTTON("Помощь");
+    HELP_BUTTON("Помощь"),
+
+    INLINE_LOGOUT("Разлогиниться");
 
     private final String buttonName;
 

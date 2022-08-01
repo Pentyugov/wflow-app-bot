@@ -14,5 +14,6 @@ public class WflowUser {
     private UUID userId;
     private Long telUserId;
     private Long telChatId;
+    private UserSettings userSettings;
 
 }

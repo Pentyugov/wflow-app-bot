@@ -1,5 +1,6 @@
 package com.pentyugov.wflowappbot.application.bot;
 
+import com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardMaker;
 import com.pentyugov.wflowappbot.application.bot.keyboard.KeyboardMaker;
 import com.pentyugov.wflowappbot.application.model.WflowTask;
 import com.pentyugov.wflowappbot.application.service.UserService;
@@ -16,11 +17,13 @@ public class MessageMaker {
 
     private final UserService userService;
     private final KeyboardMaker keyboardMaker;
+    private final InlineKeyboardMaker inlineKeyboardMaker;
 
     @Autowired
-    public MessageMaker(UserService userService, KeyboardMaker keyboardMaker) {
+    public MessageMaker(UserService userService, KeyboardMaker keyboardMaker, InlineKeyboardMaker inlineKeyboardMaker) {
         this.userService = userService;
         this.keyboardMaker = keyboardMaker;
+        this.inlineKeyboardMaker = inlineKeyboardMaker;
     }
 
     public SendMessage createStartMessage(User user, Chat chat) {
@@ -71,6 +74,19 @@ public class MessageMaker {
         sendMessage.setText(message);
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
+        return sendMessage;
+    }
+
+    public SendMessage createMessage(User user, Chat chat, BotMessageEnum messageEnum) {
+        return createMessage(user, chat, messageEnum.getMessage());
+    }
+
+    public SendMessage createSettingsMessage(User user, Chat chat) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(chat.getId()));
+        sendMessage.setText(BotMessageEnum.SETTINGS_MESSAGE.getMessage());
+        sendMessage.enableMarkdown(true);
+        sendMessage.setReplyMarkup(inlineKeyboardMaker.getInlineSettingsKeyboard(user));
         return sendMessage;
     }
 

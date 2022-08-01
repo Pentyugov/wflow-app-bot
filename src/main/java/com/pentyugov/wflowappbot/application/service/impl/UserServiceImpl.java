@@ -107,5 +107,17 @@ public class UserServiceImpl implements UserService {
         return this.users.stream().anyMatch(u -> Objects.equals(u.getTelUserId(), userId));
     }
 
+    @Override
+    public boolean isUserSubscribeOnTasks(User user) {
+        WflowUser wflowUser = findWflowUser(user);
+        return wflowUser != null && wflowUser.getUserSettings() != null ? wflowUser.getUserSettings().getSubscribeOnTasks() : false;
+    }
+
+    @Override
+    public boolean isUserSubscribeOnCalendar(User user) {
+        WflowUser wflowUser = findWflowUser(user);
+        return wflowUser != null && wflowUser.getUserSettings() != null ? wflowUser.getUserSettings().getSubscribeOnCalendar() : false;
+    }
+
 
 }

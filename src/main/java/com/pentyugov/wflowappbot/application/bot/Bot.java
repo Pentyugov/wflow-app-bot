@@ -1,14 +1,13 @@
 package com.pentyugov.wflowappbot.application.bot;
 
-import com.pentyugov.wflowappbot.application.bot.commands.CodeCommand;
-import com.pentyugov.wflowappbot.application.bot.commands.LoginCommand;
-import com.pentyugov.wflowappbot.application.bot.commands.StartCommand;
+import com.pentyugov.wflowappbot.application.bot.commands.*;
 import com.pentyugov.wflowappbot.application.bot.handler.MessageHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -25,16 +24,20 @@ public class Bot extends TelegramLongPollingCommandBot {
     private final LoginCommand loginCommand;
     private final CodeCommand codeCommand;
     private final MessageHandler messageHandler;
+    private final HelpCommand helpCommand;
+    private final LogoutCommand logoutCommand;
 
     @Autowired
-    public Bot(StartCommand startCommand, LoginCommand loginCommand, CodeCommand codeCommand, MessageHandler messageHandler) {
+    public Bot(StartCommand startCommand, LoginCommand loginCommand, CodeCommand codeCommand, MessageHandler messageHandler, HelpCommand helpCommand, LogoutCommand logoutCommand) {
         super();
         this.startCommand = startCommand;
         this.loginCommand = loginCommand;
         this.codeCommand = codeCommand;
         this.messageHandler = messageHandler;
+        this.helpCommand = helpCommand;
+        this.logoutCommand = logoutCommand;
 
-        registerAll(this.startCommand, this.loginCommand, this.codeCommand);
+        registerAll(this.startCommand, this.loginCommand, this.codeCommand, this.helpCommand, this.logoutCommand);
     }
 
     @Override
@@ -57,10 +60,16 @@ public class Bot extends TelegramLongPollingCommandBot {
         super.onUpdatesReceived(updates);
     }
 
-    public void onHandleNonCommandUpdate(Update update) {
+    private void onHandleNonCommandUpdate(Update update) {
         if (update.hasMessage()) {
             sendMessage(messageHandler.getAnswerMessage(update.getMessage()));
+        } else if (update.hasCallbackQuery()){
+            onHandleCallbackQuery(update.getCallbackQuery());
         }
+    }
+
+    private void onHandleCallbackQuery(CallbackQuery callbackQuery) {
+        String a = "";
     }
 
     public void sendMessage(SendMessage sendMessage) {
