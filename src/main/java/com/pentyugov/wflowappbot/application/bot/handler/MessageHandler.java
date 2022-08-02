@@ -24,6 +24,9 @@ public class MessageHandler {
         if (ButtonNameEnum.HELP_BUTTON.getButtonName().equals(inputMessage)) {
             sendMessage = messageMaker.createMessage(message.getFrom(), message.getChat(), BotMessageEnum.HELP_MESSAGE.getMessage());
 
+        } else if (ButtonNameEnum.MY_TASKS_BUTTON.getButtonName().equals(inputMessage)) {
+            sendMessage = messageMaker.createMyTasksMessage(message.getFrom(), message.getChat());
+
         } else if (ButtonNameEnum.SETTINGS_BUTTON.getButtonName().equals(inputMessage)) {
             sendMessage = messageMaker.createSettingsMessage(message.getFrom(), message.getChat());
 

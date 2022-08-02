@@ -35,6 +35,8 @@ public enum BotMessageEnum {
     EXCEPTION_LOGIN("\u26D4 Что то пошло не так\n" +
             "Обратитесь к администратору системы"),
 
+    TEMPLATE_TASK("\uD83D\uDCDD Задача №%s"),
+
     TEMPLATE_TASK_ASSIGNED("\u2705 Вам назначена задача № $number!\n\n" +
             "\uD83D\uDCCA Приоритет: $priority \n\n" +
             "\uD83D\uDCC1 Проект: $project \n\n" +
@@ -59,6 +61,8 @@ public enum BotMessageEnum {
             "Воспользуйтесь клавиатурой, чтобы начать работу\uD83D\uDC47"),
 
     SETTINGS_MESSAGE("\uD83D\uDD27 Настройки"),
+
+    MY_TASKS_MESSAGE("✅  Мои задачи"),
 
     TASK_PRIORITY_LOW("Низкий"),
 

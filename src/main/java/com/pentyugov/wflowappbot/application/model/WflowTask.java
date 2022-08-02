@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,6 +16,7 @@ public class WflowTask {
     public static final String PRIORITY_MEDIUM = "PRIORITY$MEDIUM";
     public static final String PRIORITY_HIGH = "PRIORITY$HIGH";
 
+    private UUID id;
     private String number;
     private String description;
     private String priority;

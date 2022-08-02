@@ -3,7 +3,9 @@ package com.pentyugov.wflowappbot.application.bot;
 import com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardMaker;
 import com.pentyugov.wflowappbot.application.bot.keyboard.KeyboardMaker;
 import com.pentyugov.wflowappbot.application.model.WflowTask;
+import com.pentyugov.wflowappbot.application.service.TaskService;
 import com.pentyugov.wflowappbot.application.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -11,20 +13,16 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class MessageMaker {
 
     private final UserService userService;
     private final KeyboardMaker keyboardMaker;
     private final InlineKeyboardMaker inlineKeyboardMaker;
-
-    @Autowired
-    public MessageMaker(UserService userService, KeyboardMaker keyboardMaker, InlineKeyboardMaker inlineKeyboardMaker) {
-        this.userService = userService;
-        this.keyboardMaker = keyboardMaker;
-        this.inlineKeyboardMaker = inlineKeyboardMaker;
-    }
+    private final TaskService taskService;
 
     public SendMessage createStartMessage(User user, Chat chat) {
         SendMessage sendMessage;
@@ -87,6 +85,17 @@ public class MessageMaker {
         sendMessage.setText(BotMessageEnum.SETTINGS_MESSAGE.getMessage());
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(inlineKeyboardMaker.getInlineSettingsKeyboard(user));
+        return sendMessage;
+    }
+
+    public SendMessage createMyTasksMessage(User user, Chat chat) {
+        List<WflowTask> tasks = taskService.getTaskPage(user, 0);
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(chat.getId()));
+        sendMessage.setText(BotMessageEnum.MY_TASKS_MESSAGE.getMessage());
+        sendMessage.enableMarkdown(true);
+        sendMessage.setReplyMarkup(inlineKeyboardMaker.getInlineMyTasksKeyboard(tasks));
         return sendMessage;
     }
 

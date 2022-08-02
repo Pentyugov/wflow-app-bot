@@ -1,5 +1,7 @@
 package com.pentyugov.wflowappbot.application.bot.keyboard;
 
+import com.pentyugov.wflowappbot.application.bot.BotMessageEnum;
+import com.pentyugov.wflowappbot.application.model.WflowTask;
 import com.pentyugov.wflowappbot.application.service.UserService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -29,6 +31,17 @@ public class InlineKeyboardMaker {
         rowList.add(getRowButtons(Collections.singletonMap(Name.INLINE_LOGOUT, CallbackQueryAction.CALLBACK_QUERY_LOGOUT)));
         rowList.add(getRowButtons(getTaskSubscribeButtonData(user)));
         rowList.add(getRowButtons(getCalendarSubscribeButtonData(user)));
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        return inlineKeyboardMarkup;
+    }
+
+    public InlineKeyboardMarkup getInlineMyTasksKeyboard(List<WflowTask> tasks) {
+        final List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        tasks.forEach(task -> {
+            rowList.add(getRowButtons((Collections.singletonMap(String.format(BotMessageEnum.TEMPLATE_TASK.getMessage(), task.getNumber()), "/task_" + task.getId()))));
+        });
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
