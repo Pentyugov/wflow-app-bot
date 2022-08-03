@@ -5,7 +5,10 @@ import com.pentyugov.wflowappbot.application.bot.MessageMaker;
 import com.pentyugov.wflowappbot.application.bot.keyboard.ButtonNameEnum;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import static com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardConstants.Name.*;
+import static com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardConstants.CallbackQueryAction.*;
 
 @Component
 public class MessageHandler {
@@ -36,5 +39,20 @@ public class MessageHandler {
 
 
         return sendMessage;
+    }
+
+    public SendMessage handleCallbackQuery(CallbackQuery callbackQuery) {
+        String a = "";
+        if (CALLBACK_QUERY_TASKS_PREV.equals(callbackQuery.getData())) {
+            return messageMaker.createPrevMyTasksMessage(callbackQuery.getFrom(), callbackQuery.getMessage().getChat());
+        }
+        if (CALLBACK_QUERY_TASKS_NEXT.equals(callbackQuery.getData())) {
+            return messageMaker.createNextMyTasksMessage(callbackQuery.getFrom(), callbackQuery.getMessage().getChat());
+        }
+
+//        switch (callback) {
+//            case CALLBACK_QUERY_TASKS_PREV : return messageMaker.
+//        }
+        return null;
     }
 }

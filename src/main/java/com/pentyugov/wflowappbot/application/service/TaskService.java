@@ -9,4 +9,7 @@ public interface TaskService {
     String NAME = "tel$TaskService";
 
     List<WflowTask> getTaskPage(User user, Integer page);
+    List<WflowTask> getNextTaskPage(User user);
+    List<WflowTask> getPrevTaskPage(User user);
+    Integer getCurrentPageNumber(User user);
 }

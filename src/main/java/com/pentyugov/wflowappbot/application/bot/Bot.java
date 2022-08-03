@@ -2,6 +2,7 @@ package com.pentyugov.wflowappbot.application.bot;
 
 import com.pentyugov.wflowappbot.application.bot.commands.*;
 import com.pentyugov.wflowappbot.application.bot.handler.MessageHandler;
+import com.pentyugov.wflowappbot.application.service.FeignTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -69,7 +70,9 @@ public class Bot extends TelegramLongPollingCommandBot {
     }
 
     private void onHandleCallbackQuery(CallbackQuery callbackQuery) {
-        String a = "";
+        SendMessage sendMessage = messageHandler.handleCallbackQuery(callbackQuery);
+        if (sendMessage != null)
+            sendMessage(sendMessage);
     }
 
     public void sendMessage(SendMessage sendMessage) {

@@ -88,6 +88,28 @@ public class MessageMaker {
         return sendMessage;
     }
 
+    public SendMessage createPrevMyTasksMessage(User user, Chat chat) {
+        List<WflowTask> tasks = taskService.getPrevTaskPage(user);
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(chat.getId()));
+        sendMessage.setText(BotMessageEnum.MY_TASKS_MESSAGE.getMessage());
+        sendMessage.enableMarkdown(true);
+        sendMessage.setReplyMarkup(inlineKeyboardMaker.getInlineMyTasksKeyboard(user, tasks));
+        return sendMessage;
+    }
+
+    public SendMessage createNextMyTasksMessage(User user, Chat chat) {
+        List<WflowTask> tasks = taskService.getNextTaskPage(user);
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(chat.getId()));
+        sendMessage.setText(BotMessageEnum.MY_TASKS_MESSAGE.getMessage());
+        sendMessage.enableMarkdown(true);
+        sendMessage.setReplyMarkup(inlineKeyboardMaker.getInlineMyTasksKeyboard(user, tasks));
+        return sendMessage;
+    }
+
     public SendMessage createMyTasksMessage(User user, Chat chat) {
         List<WflowTask> tasks = taskService.getTaskPage(user, 0);
 
@@ -95,7 +117,7 @@ public class MessageMaker {
         sendMessage.setChatId(String.valueOf(chat.getId()));
         sendMessage.setText(BotMessageEnum.MY_TASKS_MESSAGE.getMessage());
         sendMessage.enableMarkdown(true);
-        sendMessage.setReplyMarkup(inlineKeyboardMaker.getInlineMyTasksKeyboard(tasks));
+        sendMessage.setReplyMarkup(inlineKeyboardMaker.getInlineMyTasksKeyboard(user, tasks));
         return sendMessage;
     }
 

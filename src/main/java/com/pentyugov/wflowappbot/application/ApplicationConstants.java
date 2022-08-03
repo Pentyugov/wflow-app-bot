@@ -8,4 +8,6 @@ public class ApplicationConstants {
     public static String API_VERIFY_CODE_ENDPOINT = API_URL + "/verify-code";
     public static String API_GET_TASKS_PAGE_ENDPOINT = API_URL + "/tasks/page";
 
+    public static Integer TASKS_PER_PAGE = 10;
+
 }
