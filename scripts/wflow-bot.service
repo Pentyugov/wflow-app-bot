@@ -5,8 +5,6 @@ After=syslog.target network.target
 [Service]
 SuccessExitStatus=143
 
-Environment="WFLOW_TEL_BOT_NAME=wflow_app_bot"
-Environment="WFLOW_TEL_BOT_TOKEN=5384979391:AAE4YsuGmFqxixL4FRbzuh-hME5_oT9ClXo"
 
 
 User=root
