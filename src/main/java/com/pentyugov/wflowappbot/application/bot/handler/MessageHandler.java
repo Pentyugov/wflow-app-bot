@@ -6,9 +6,11 @@ import com.pentyugov.wflowappbot.application.bot.keyboard.ButtonNameEnum;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import static com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardConstants.Name.*;
-import static com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardConstants.CallbackQueryAction.*;
+
+import static com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardConstants.CallbackQueryAction.CALLBACK_QUERY_TASKS_NEXT;
+import static com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardConstants.CallbackQueryAction.CALLBACK_QUERY_TASKS_PREV;
 
 @Component
 public class MessageHandler {
@@ -37,22 +39,20 @@ public class MessageHandler {
             sendMessage = messageMaker.createMessage(message.getFrom(), message.getChat(), BotMessageEnum.DEFAULT_WRONG_REQUEST_MESSAGE.getMessage());
         }
 
-
         return sendMessage;
     }
 
+    public SendMessage getNotConnectedToServerMessage(Chat chat) {
+        return messageMaker.createNotConnectedToServerMessage(chat);
+    }
+
     public SendMessage handleCallbackQuery(CallbackQuery callbackQuery) {
-        String a = "";
         if (CALLBACK_QUERY_TASKS_PREV.equals(callbackQuery.getData())) {
             return messageMaker.createPrevMyTasksMessage(callbackQuery.getFrom(), callbackQuery.getMessage().getChat());
         }
         if (CALLBACK_QUERY_TASKS_NEXT.equals(callbackQuery.getData())) {
             return messageMaker.createNextMyTasksMessage(callbackQuery.getFrom(), callbackQuery.getMessage().getChat());
         }
-
-//        switch (callback) {
-//            case CALLBACK_QUERY_TASKS_PREV : return messageMaker.
-//        }
         return null;
     }
 }

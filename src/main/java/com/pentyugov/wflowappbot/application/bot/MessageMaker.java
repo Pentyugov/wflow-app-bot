@@ -1,5 +1,6 @@
 package com.pentyugov.wflowappbot.application.bot;
 
+import com.pentyugov.wflowappbot.application.bot.aspect.Connected;
 import com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardMaker;
 import com.pentyugov.wflowappbot.application.bot.keyboard.KeyboardMaker;
 import com.pentyugov.wflowappbot.application.model.WflowTask;
@@ -110,6 +111,7 @@ public class MessageMaker {
         return sendMessage;
     }
 
+    @Connected
     public SendMessage createMyTasksMessage(User user, Chat chat) {
         List<WflowTask> tasks = taskService.getTaskPage(user, 0);
 
@@ -130,6 +132,13 @@ public class MessageMaker {
             sendMessage.enableMarkdown(true);
             sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
         }
+        return sendMessage;
+    }
+
+    public SendMessage createNotConnectedToServerMessage(Chat chat) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(chat.getId()));
+        sendMessage.setText(BotMessageEnum.APPLICATION_NOT_CONNECTED.getMessage());
         return sendMessage;
     }
 

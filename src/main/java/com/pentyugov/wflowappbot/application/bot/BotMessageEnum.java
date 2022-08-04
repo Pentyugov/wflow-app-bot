@@ -1,7 +1,9 @@
 package com.pentyugov.wflowappbot.application.bot;
 
 public enum BotMessageEnum {
-    //ответы на команды с клавиатуры
+
+    APPLICATION_NOT_CONNECTED("\u26D4 Нет соединения с сервером, попробуйте позже"),
+
     START_MESSAGE_NOT_LOGGED_IN("\uD83D\uDC4B Привет, я бот помощник для приложения Wflow-app\n\n" +
             "\u27A1 Для авторизации под пользователем системы Wflow-app наберите команду:\n /login {логин пользователя системы Wflow-app}\n\n\n" +
             "Воспользуйтесь клавиатурой, чтобы начать работу\uD83D\uDC47"

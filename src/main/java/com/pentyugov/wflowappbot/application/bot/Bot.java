@@ -3,12 +3,14 @@ package com.pentyugov.wflowappbot.application.bot;
 import com.pentyugov.wflowappbot.application.bot.commands.*;
 import com.pentyugov.wflowappbot.application.bot.handler.MessageHandler;
 import com.pentyugov.wflowappbot.application.service.FeignTaskService;
+import com.pentyugov.wflowappbot.application.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -27,9 +29,10 @@ public class Bot extends TelegramLongPollingCommandBot {
     private final MessageHandler messageHandler;
     private final HelpCommand helpCommand;
     private final LogoutCommand logoutCommand;
+    private final SessionService sessionService;
 
     @Autowired
-    public Bot(StartCommand startCommand, LoginCommand loginCommand, CodeCommand codeCommand, MessageHandler messageHandler, HelpCommand helpCommand, LogoutCommand logoutCommand) {
+    public Bot(StartCommand startCommand, LoginCommand loginCommand, CodeCommand codeCommand, MessageHandler messageHandler, HelpCommand helpCommand, LogoutCommand logoutCommand, SessionService sessionService) {
         super();
         this.startCommand = startCommand;
         this.loginCommand = loginCommand;
@@ -37,6 +40,7 @@ public class Bot extends TelegramLongPollingCommandBot {
         this.messageHandler = messageHandler;
         this.helpCommand = helpCommand;
         this.logoutCommand = logoutCommand;
+        this.sessionService = sessionService;
 
         registerAll(this.startCommand, this.loginCommand, this.codeCommand, this.helpCommand, this.logoutCommand);
     }
@@ -58,7 +62,11 @@ public class Bot extends TelegramLongPollingCommandBot {
 
     @Override
     public void onUpdatesReceived(List<Update> updates) {
-        super.onUpdatesReceived(updates);
+        if (sessionService.isConnectedToServer()) {
+            super.onUpdatesReceived(updates);
+        } else {
+            sendConnectionRefusedMessage(updates.get(0).getMessage().getChat());
+        }
     }
 
     private void onHandleNonCommandUpdate(Update update) {
@@ -76,11 +84,16 @@ public class Bot extends TelegramLongPollingCommandBot {
     }
 
     public void sendMessage(SendMessage sendMessage) {
-
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
     }
+
+    public void sendConnectionRefusedMessage(Chat chat) {
+        sendMessage(messageHandler.getNotConnectedToServerMessage(chat));
+    }
+
+
 }

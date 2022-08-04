@@ -1,7 +1,9 @@
 package com.pentyugov.wflowappbot.configuration;
 
 import com.pentyugov.wflowappbot.application.bot.Bot;
+import com.pentyugov.wflowappbot.application.service.SessionService;
 import com.pentyugov.wflowappbot.application.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
@@ -12,17 +14,13 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @Configuration
+@RequiredArgsConstructor
 public class TelegramBotConfiguration implements ApplicationListener<ContextRefreshedEvent> {
     private static final Long CHAT_ID = 438939028L;
 
     private final Bot bot;
     private final UserService userService;
-
-    @Autowired
-    public TelegramBotConfiguration(Bot bot, UserService userService) {
-        this.bot = bot;
-        this.userService = userService;
-    }
+    private final SessionService sessionService;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -34,10 +32,12 @@ public class TelegramBotConfiguration implements ApplicationListener<ContextRefr
             sendMessage.setChatId(CHAT_ID.toString());
             sendMessage.setText("Wflow-app bot started...");
             bot.sendMessage(sendMessage);
+            sessionService.authenticate();
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
 
-        userService.loadLoggedUsers();
+        if (sessionService.isConnectedToServer())
+            userService.loadLoggedUsers();
     }
 }

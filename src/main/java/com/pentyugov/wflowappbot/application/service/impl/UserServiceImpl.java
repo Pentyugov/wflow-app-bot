@@ -2,6 +2,7 @@ package com.pentyugov.wflowappbot.application.service.impl;
 
 import com.pentyugov.wflowappbot.application.ApplicationConstants;
 import com.pentyugov.wflowappbot.application.bot.BotMessageEnum;
+import com.pentyugov.wflowappbot.application.bot.aspect.Connected;
 import com.pentyugov.wflowappbot.application.model.WflowUser;
 import com.pentyugov.wflowappbot.application.rest.payload.LoginException;
 import com.pentyugov.wflowappbot.application.rest.payload.request.TelegramLoginUserRequest;
@@ -25,7 +26,7 @@ import java.util.UUID;
 @Service(UserService.NAME)
 public class UserServiceImpl implements UserService {
 
-    private List<WflowUser> users = new ArrayList<>();
+    private List<WflowUser> users = new ArrayList<>();;
 
     @Override
     public void loadLoggedUsers() {
