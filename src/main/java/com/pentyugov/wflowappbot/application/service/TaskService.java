@@ -11,5 +11,6 @@ public interface TaskService {
     List<WflowTask> getTaskPage(User user, Integer page);
     List<WflowTask> getNextTaskPage(User user);
     List<WflowTask> getPrevTaskPage(User user);
+    WflowTask getTaskById(User user, String taskId);
     Integer getCurrentPageNumber(User user);
 }

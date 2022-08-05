@@ -39,6 +39,13 @@ public enum BotMessageEnum {
 
     TEMPLATE_TASK("\uD83D\uDCDD Задача №%s"),
 
+    TEMPLATE_TASK_DATA("\u2705 Задача № $number!\n\n" +
+            "\uD83D\uDCCA Приоритет: $priority \n\n" +
+            "\uD83D\uDCC1 Проект: $project \n\n" +
+            "\uD83D\uDCC5 Срок выполнения: $dueDate \n\n" +
+            "\uD83D\uDCDD Описание: $description \n\n" +
+            "\u270D Комментарий: $comment"),
+
     TEMPLATE_TASK_ASSIGNED("\u2705 Вам назначена задача № $number!\n\n" +
             "\uD83D\uDCCA Приоритет: $priority \n\n" +
             "\uD83D\uDCC1 Проект: $project \n\n" +

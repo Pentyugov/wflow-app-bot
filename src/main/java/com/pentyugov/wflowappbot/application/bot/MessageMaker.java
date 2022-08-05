@@ -43,37 +43,43 @@ public class MessageMaker {
     }
 
     public SendMessage creatTaskAssignedMessage(Long chaId, WflowTask task) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        String message = BotMessageEnum.TEMPLATE_TASK_ASSIGNED.getMessage()
-                .replace("$number", task.getNumber())
-                .replace("$priority", getPriority(task.getPriority()))
-                .replace("$project", task.getProject() != null ? task.getProject() : " - ")
-                .replace("$dueDate", dateFormat.format(task.getDueDate()))
-                .replace("$description", task.getDescription())
-                .replace("$comment", task.getComment());
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chaId));
-        sendMessage.setText(message);
+        sendMessage.setText(generateFromTemplate(BotMessageEnum.TEMPLATE_TASK_ASSIGNED, task));
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
         return sendMessage;
     }
 
     public SendMessage creatTaskOverdueMessage(Long chaId, WflowTask task) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(chaId));
+        sendMessage.setText(generateFromTemplate(BotMessageEnum.TEMPLATE_TASK_OVERDUE, task));
+        sendMessage.enableMarkdown(true);
+        sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
+        return sendMessage;
+    }
+
+    public SendMessage createTaskDataMessage(User user, Chat chat, String taskId) {
+        WflowTask task = taskService.getTaskById(user, taskId);
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(chat.getId()));
+        sendMessage.setText(generateFromTemplate(BotMessageEnum.TEMPLATE_TASK_DATA, task));
+        sendMessage.enableMarkdown(true);
+        sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
+        return sendMessage;
+    }
+
+    private String generateFromTemplate(BotMessageEnum template, WflowTask task) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        String message = BotMessageEnum.TEMPLATE_TASK_OVERDUE.getMessage()
+        return template.getMessage()
                 .replace("$number", task.getNumber())
                 .replace("$priority", getPriority(task.getPriority()))
                 .replace("$project", task.getProject() != null ? task.getProject() : " - ")
                 .replace("$dueDate", dateFormat.format(task.getDueDate()))
                 .replace("$description", task.getDescription())
                 .replace("$comment", task.getComment());
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(String.valueOf(chaId));
-        sendMessage.setText(message);
-        sendMessage.enableMarkdown(true);
-        sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
-        return sendMessage;
     }
 
     public SendMessage createMessage(User user, Chat chat, BotMessageEnum messageEnum) {

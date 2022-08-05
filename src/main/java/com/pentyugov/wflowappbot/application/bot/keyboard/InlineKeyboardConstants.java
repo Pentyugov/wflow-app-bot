@@ -18,6 +18,7 @@ public class InlineKeyboardConstants {
         String CALLBACK_QUERY_CALENDAR_SUBSCRIBE = "/calendar_subscribe";
         String CALLBACK_QUERY_TASKS_PREV = "/tasks_prev";
         String CALLBACK_QUERY_TASKS_NEXT = "/tasks_next";
+        String CALLBACK_QUERY_TASK_COMMAND_PREFIX = "/task_";
     }
 
 

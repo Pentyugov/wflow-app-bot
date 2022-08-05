@@ -29,9 +29,10 @@ public class ConnectedAspect {
                          Connected connected,
                          User user,
                          Chat chat) throws Throwable {
-        sessionService.authenticate();
-        if (sessionService.isConnectedToServer())
+        if (sessionService.checkConnection()) {
             return joinPoint.proceed();
+        }
+
         bot.sendConnectionRefusedMessage(chat);
         return null;
     }

@@ -3,14 +3,14 @@ package com.pentyugov.wflowappbot.application.bot.handler;
 import com.pentyugov.wflowappbot.application.bot.BotMessageEnum;
 import com.pentyugov.wflowappbot.application.bot.MessageMaker;
 import com.pentyugov.wflowappbot.application.bot.keyboard.ButtonNameEnum;
+import com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardConstants;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import static com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardConstants.CallbackQueryAction.CALLBACK_QUERY_TASKS_NEXT;
-import static com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardConstants.CallbackQueryAction.CALLBACK_QUERY_TASKS_PREV;
+import static com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardConstants.CallbackQueryAction.*;
 
 @Component
 public class MessageHandler {
@@ -52,6 +52,10 @@ public class MessageHandler {
         }
         if (CALLBACK_QUERY_TASKS_NEXT.equals(callbackQuery.getData())) {
             return messageMaker.createNextMyTasksMessage(callbackQuery.getFrom(), callbackQuery.getMessage().getChat());
+        }
+        if (callbackQuery.getData().startsWith(CALLBACK_QUERY_TASK_COMMAND_PREFIX)) {
+            String taskId = callbackQuery.getData().replace(CALLBACK_QUERY_TASK_COMMAND_PREFIX, "");
+            return messageMaker.createTaskDataMessage(callbackQuery.getFrom(), callbackQuery.getMessage().getChat(), taskId);
         }
         return null;
     }

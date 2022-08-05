@@ -2,7 +2,6 @@ package com.pentyugov.wflowappbot.application.service.impl;
 
 import com.pentyugov.wflowappbot.application.ApplicationConstants;
 import com.pentyugov.wflowappbot.application.bot.BotMessageEnum;
-import com.pentyugov.wflowappbot.application.bot.aspect.Connected;
 import com.pentyugov.wflowappbot.application.model.WflowUser;
 import com.pentyugov.wflowappbot.application.rest.payload.LoginException;
 import com.pentyugov.wflowappbot.application.rest.payload.request.TelegramLoginUserRequest;
@@ -10,33 +9,79 @@ import com.pentyugov.wflowappbot.application.rest.payload.request.TelegramVerify
 import com.pentyugov.wflowappbot.application.rest.payload.response.TelegramLoggedUsersResponse;
 import com.pentyugov.wflowappbot.application.rest.payload.response.TelegramLoginUserResponse;
 import com.pentyugov.wflowappbot.application.rest.payload.response.TelegramVerifyCodeResponse;
+import com.pentyugov.wflowappbot.application.service.SessionService;
 import com.pentyugov.wflowappbot.application.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service(UserService.NAME)
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private List<WflowUser> users = new ArrayList<>();;
+    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    private List<WflowUser> users = new ArrayList<>();
+    private final SessionService sessionService;
+    private final RestTemplate restTemplate;
 
     @Override
     public void loadLoggedUsers() {
-        RestTemplate restTemplate = new RestTemplate();
-        TelegramLoggedUsersResponse response =
-                restTemplate.getForObject(ApplicationConstants.API_GET_LOGGED_USERS_ENDPOINT, TelegramLoggedUsersResponse.class);
+        try {
+            ResponseEntity<TelegramLoggedUsersResponse> response = restTemplate.exchange(
+                    ApplicationConstants.API_GET_LOGGED_USERS_ENDPOINT,
+                    HttpMethod.GET,
+                    new HttpEntity<>(null, sessionService.getJwtHeaders()),
+                    TelegramLoggedUsersResponse.class,
+                    Collections.emptyMap()
+            );
 
-        if (response != null && response.getHttpStatus().equals(HttpStatus.OK)) {
-            users = response.getUsers();
+            if (response.getStatusCode().equals(HttpStatus.OK) && response.getBody() != null) {
+                users = response.getBody().getUsers();
+            }
+        } catch (HttpStatusCodeException e) {
+            logger.error(e.getMessage());
         }
+    }
+
+    @Override
+    public void loginUserInService(User user, Chat chat, String username) {
+        TelegramLoginUserRequest request = new TelegramLoginUserRequest();
+        request.setUsername(username);
+        request.setTelUserId(user.getId());
+        request.setTelChatId(chat.getId());
+
+        try {
+            ResponseEntity<TelegramLoginUserResponse> response = restTemplate.exchange(
+                    ApplicationConstants.API_LOGIN_ENDPOINT,
+                    HttpMethod.POST,
+                    new HttpEntity<>(request, sessionService.getJwtHeaders()),
+                    TelegramLoginUserResponse.class,
+                    Collections.emptyMap()
+            );
+
+            if (response.getBody() != null) {
+                WflowUser wflowUser = new WflowUser();
+                wflowUser.setUserId(UUID.fromString(response.getBody().getUserId()));
+            } else {
+                throw new LoginException(BotMessageEnum.EXCEPTION_LOGIN.getMessage());
+            }
+        } catch (HttpClientErrorException e) {
+            throw new LoginException(e.getMessage());
+        }
+
     }
 
     @Override
@@ -56,28 +101,7 @@ public class UserServiceImpl implements UserService {
         return wflowUser;
     }
 
-    @Override
-    public void loginUserInService(User user, Chat chat, String username) {
-        TelegramLoginUserRequest request = new TelegramLoginUserRequest();
-        request.setUsername(username);
-        request.setTelUserId(user.getId());
-        request.setTelChatId(chat.getId());
 
-        RestTemplate restTemplate = new RestTemplate();
-        try {
-            TelegramLoginUserResponse response =
-                    restTemplate.postForObject(ApplicationConstants.API_LOGIN_ENDPOINT, request, TelegramLoginUserResponse.class);
-            if (response != null) {
-                WflowUser wflowUser = new WflowUser();
-                wflowUser.setUserId(UUID.fromString(response.getUserId()));
-            } else {
-                throw new LoginException(BotMessageEnum.EXCEPTION_LOGIN.getMessage());
-            }
-        } catch (HttpClientErrorException e) {
-            throw new LoginException(e.getMessage());
-        }
-
-    }
 
     @Override
     public boolean checkVerificationCode(User user, String code) {
@@ -85,13 +109,21 @@ public class UserServiceImpl implements UserService {
         request.setTelUserId(user.getId());
         request.setCode(code);
 
-        RestTemplate restTemplate = new RestTemplate();
-        TelegramVerifyCodeResponse response =
-                restTemplate.postForObject(ApplicationConstants.API_VERIFY_CODE_ENDPOINT, request, TelegramVerifyCodeResponse.class);
+        try {
+            ResponseEntity<TelegramVerifyCodeResponse> response = restTemplate.exchange(
+                    ApplicationConstants.API_VERIFY_CODE_ENDPOINT,
+                    HttpMethod.POST,
+                    new HttpEntity<>(request, sessionService.getJwtHeaders()),
+                    TelegramVerifyCodeResponse.class,
+                    Collections.emptyMap()
+            );
 
-        if (response != null) {
-            loadLoggedUsers();
-            return response.isVerified();
+            if (response.getBody() != null) {
+                loadLoggedUsers();
+                return response.getBody().isVerified();
+            }
+        } catch (HttpClientErrorException e) {
+            throw new LoginException(e.getMessage());
         }
         return false;
     }
