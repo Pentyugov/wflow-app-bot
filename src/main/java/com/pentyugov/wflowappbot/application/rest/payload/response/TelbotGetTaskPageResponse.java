@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TelegramGetTaskPageResponse {
+public class TelbotGetTaskPageResponse {
 
     private Integer page;
     List<WflowTask> tasks;

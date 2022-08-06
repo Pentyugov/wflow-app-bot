@@ -40,7 +40,7 @@ public class CodeCommand extends ServiceCommand {
 
                 } catch (LoginException e) {
                     logger.error(e.getMessage());
-                    answer = BotMessageEnum.EXCEPTION_LOGIN;
+                    answer = BotMessageEnum.EXCEPTION_;
                 }
 
             } else {

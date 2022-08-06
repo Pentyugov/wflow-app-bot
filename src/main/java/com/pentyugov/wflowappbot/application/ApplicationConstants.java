@@ -9,6 +9,7 @@ public class ApplicationConstants {
 
     public static String API_URL;
     public static String API_CHECK_CONNECTION;
+    public static String API_SETTINGS_ENDPOINT;
     public static String API_AUTH_URL;
     public static String API_LOGIN_ENDPOINT;
     public static String API_GET_LOGGED_USERS_ENDPOINT;
@@ -20,6 +21,7 @@ public class ApplicationConstants {
     public void setApiUrl(String url) {
         ApplicationConstants.API_URL = url;
         ApplicationConstants.API_AUTH_URL                   = ApplicationConstants.API_URL + "/auth/login";
+        ApplicationConstants.API_SETTINGS_ENDPOINT          = ApplicationConstants.API_URL + "/v1/telbot/settings";
         ApplicationConstants.API_CHECK_CONNECTION           = ApplicationConstants.API_URL + "/v1/telbot/check-connection";
         ApplicationConstants.API_LOGIN_ENDPOINT             = ApplicationConstants.API_URL + "/v1/telbot/login";
         ApplicationConstants.API_GET_LOGGED_USERS_ENDPOINT  = ApplicationConstants.API_URL + "/v1/telbot/logged-users";

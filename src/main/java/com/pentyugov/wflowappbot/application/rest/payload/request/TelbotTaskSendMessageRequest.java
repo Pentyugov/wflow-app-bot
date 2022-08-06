@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TelegramTaskSendMessageRequest {
+public class TelbotTaskSendMessageRequest {
 
     public final static Integer TYPE_ASSIGNED = 10;
     public final static Integer TYPE_OVERDUE = 30;

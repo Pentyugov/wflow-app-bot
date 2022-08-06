@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TelegramVerifyCodeResponse {
-    private boolean verified = false;
+public class TelbotTaskSendMessageResponse {
+
     private HttpStatus httpStatus;
 }

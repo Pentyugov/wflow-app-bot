@@ -12,13 +12,14 @@ public class InlineKeyboardConstants {
 
     public interface CallbackQueryAction {
         String CALLBACK_QUERY_LOGOUT = "/logout";
-        String CALLBACK_QUERY_TASKS_UNSUBSCRIBE = "/tasks_unsubscribe";
-        String CALLBACK_QUERY_CALENDAR_UNSUBSCRIBE = "/calendar_unsubscribe";
-        String CALLBACK_QUERY_TASKS_SUBSCRIBE = "/tasks_subscribe";
-        String CALLBACK_QUERY_CALENDAR_SUBSCRIBE = "/calendar_subscribe";
+        String CALLBACK_QUERY_TASKS_UNSUBSCRIBE = "/settings_tasks_unsubscribe";
+        String CALLBACK_QUERY_CALENDAR_UNSUBSCRIBE = "/settings_calendar_unsubscribe";
+        String CALLBACK_QUERY_TASKS_SUBSCRIBE = "/settings_tasks_subscribe";
+        String CALLBACK_QUERY_CALENDAR_SUBSCRIBE = "/settings_calendar_subscribe";
         String CALLBACK_QUERY_TASKS_PREV = "/tasks_prev";
         String CALLBACK_QUERY_TASKS_NEXT = "/tasks_next";
         String CALLBACK_QUERY_TASK_COMMAND_PREFIX = "/task_";
+        String CALLBACK_QUERY_SETTINGS_PREFIX = "/settings_";
     }
 
 

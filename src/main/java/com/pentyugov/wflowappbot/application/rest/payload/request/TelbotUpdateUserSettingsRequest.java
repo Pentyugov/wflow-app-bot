@@ -1,15 +1,14 @@
 package com.pentyugov.wflowappbot.application.rest.payload.request;
 
+import com.pentyugov.wflowappbot.application.model.UserSettings;
 import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
-public class TelegramGetTaskPageRequest {
+public class TelbotUpdateUserSettingsRequest {
     Long telUserId;
-    Integer page;
-    String sortBy;
-
+    UserSettings userSettings;
 }

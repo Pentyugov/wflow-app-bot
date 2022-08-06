@@ -57,6 +57,9 @@ public class MessageHandler {
             String taskId = callbackQuery.getData().replace(CALLBACK_QUERY_TASK_COMMAND_PREFIX, "");
             return messageMaker.createTaskDataMessage(callbackQuery.getFrom(), callbackQuery.getMessage().getChat(), taskId);
         }
+        if (callbackQuery.getData().startsWith(CALLBACK_QUERY_SETTINGS_PREFIX)) {
+            return messageMaker.createTaskUpdatedMessage(callbackQuery.getFrom(), callbackQuery.getMessage().getChat(), callbackQuery.getData());
+        }
         return null;
     }
 }

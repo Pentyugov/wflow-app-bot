@@ -1,7 +1,7 @@
 package com.pentyugov.wflowappbot.application.service;
 
-import com.pentyugov.wflowappbot.application.rest.payload.request.TelegramGetTaskPageRequest;
-import com.pentyugov.wflowappbot.application.rest.payload.response.TelegramGetTaskPageResponse;
+import com.pentyugov.wflowappbot.application.rest.payload.request.TelbotGetTaskPageRequest;
+import com.pentyugov.wflowappbot.application.rest.payload.response.TelbotGetTaskPageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface FeignTaskService {
 
     @PostMapping("/tasks/page")
-    TelegramGetTaskPageResponse getTaskPage(@RequestBody TelegramGetTaskPageRequest request);
+    TelbotGetTaskPageResponse getTaskPage(@RequestBody TelbotGetTaskPageRequest request);
 
 }

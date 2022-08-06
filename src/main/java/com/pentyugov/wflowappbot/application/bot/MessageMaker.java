@@ -71,6 +71,19 @@ public class MessageMaker {
         return sendMessage;
     }
 
+    public SendMessage createTaskUpdatedMessage(User user, Chat chat, String callbackData) {
+        boolean updated = userService.updateUserSettings(user, callbackData);
+        String message = updated ? BotMessageEnum.SETTINGS_UPDATED.getMessage() : BotMessageEnum.EXCEPTION_.getMessage();
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(chat.getId()));
+        sendMessage.setText(message);
+        sendMessage.enableMarkdown(true);
+        sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
+        return sendMessage;
+
+    }
+
     private String generateFromTemplate(BotMessageEnum template, WflowTask task) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         return template.getMessage()

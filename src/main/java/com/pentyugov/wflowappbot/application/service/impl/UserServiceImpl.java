@@ -1,14 +1,18 @@
 package com.pentyugov.wflowappbot.application.service.impl;
 
+
+import static com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardConstants.CallbackQueryAction.*;
 import com.pentyugov.wflowappbot.application.ApplicationConstants;
 import com.pentyugov.wflowappbot.application.bot.BotMessageEnum;
+import com.pentyugov.wflowappbot.application.model.UserSettings;
 import com.pentyugov.wflowappbot.application.model.WflowUser;
 import com.pentyugov.wflowappbot.application.rest.payload.LoginException;
-import com.pentyugov.wflowappbot.application.rest.payload.request.TelegramLoginUserRequest;
-import com.pentyugov.wflowappbot.application.rest.payload.request.TelegramVerifyCodeRequest;
-import com.pentyugov.wflowappbot.application.rest.payload.response.TelegramLoggedUsersResponse;
-import com.pentyugov.wflowappbot.application.rest.payload.response.TelegramLoginUserResponse;
-import com.pentyugov.wflowappbot.application.rest.payload.response.TelegramVerifyCodeResponse;
+import com.pentyugov.wflowappbot.application.rest.payload.request.TelbotLoginUserRequest;
+import com.pentyugov.wflowappbot.application.rest.payload.request.TelbotUpdateUserSettingsRequest;
+import com.pentyugov.wflowappbot.application.rest.payload.request.TelbotVerifyCodeRequest;
+import com.pentyugov.wflowappbot.application.rest.payload.response.TelbotLoggedUsersResponse;
+import com.pentyugov.wflowappbot.application.rest.payload.response.TelbotLoginUserResponse;
+import com.pentyugov.wflowappbot.application.rest.payload.response.TelbotVerifyCodeResponse;
 import com.pentyugov.wflowappbot.application.service.SessionService;
 import com.pentyugov.wflowappbot.application.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -40,11 +44,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void loadLoggedUsers() {
         try {
-            ResponseEntity<TelegramLoggedUsersResponse> response = restTemplate.exchange(
+            ResponseEntity<TelbotLoggedUsersResponse> response = restTemplate.exchange(
                     ApplicationConstants.API_GET_LOGGED_USERS_ENDPOINT,
                     HttpMethod.GET,
                     new HttpEntity<>(null, sessionService.getJwtHeaders()),
-                    TelegramLoggedUsersResponse.class,
+                    TelbotLoggedUsersResponse.class,
                     Collections.emptyMap()
             );
 
@@ -58,17 +62,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void loginUserInService(User user, Chat chat, String username) {
-        TelegramLoginUserRequest request = new TelegramLoginUserRequest();
+        TelbotLoginUserRequest request = new TelbotLoginUserRequest();
         request.setUsername(username);
         request.setTelUserId(user.getId());
         request.setTelChatId(chat.getId());
 
         try {
-            ResponseEntity<TelegramLoginUserResponse> response = restTemplate.exchange(
+            ResponseEntity<TelbotLoginUserResponse> response = restTemplate.exchange(
                     ApplicationConstants.API_LOGIN_ENDPOINT,
                     HttpMethod.POST,
                     new HttpEntity<>(request, sessionService.getJwtHeaders()),
-                    TelegramLoginUserResponse.class,
+                    TelbotLoginUserResponse.class,
                     Collections.emptyMap()
             );
 
@@ -76,7 +80,7 @@ public class UserServiceImpl implements UserService {
                 WflowUser wflowUser = new WflowUser();
                 wflowUser.setUserId(UUID.fromString(response.getBody().getUserId()));
             } else {
-                throw new LoginException(BotMessageEnum.EXCEPTION_LOGIN.getMessage());
+                throw new LoginException(BotMessageEnum.EXCEPTION_.getMessage());
             }
         } catch (HttpClientErrorException e) {
             throw new LoginException(e.getMessage());
@@ -101,20 +105,18 @@ public class UserServiceImpl implements UserService {
         return wflowUser;
     }
 
-
-
     @Override
     public boolean checkVerificationCode(User user, String code) {
-        TelegramVerifyCodeRequest request = new TelegramVerifyCodeRequest();
+        TelbotVerifyCodeRequest request = new TelbotVerifyCodeRequest();
         request.setTelUserId(user.getId());
         request.setCode(code);
 
         try {
-            ResponseEntity<TelegramVerifyCodeResponse> response = restTemplate.exchange(
+            ResponseEntity<TelbotVerifyCodeResponse> response = restTemplate.exchange(
                     ApplicationConstants.API_VERIFY_CODE_ENDPOINT,
                     HttpMethod.POST,
                     new HttpEntity<>(request, sessionService.getJwtHeaders()),
-                    TelegramVerifyCodeResponse.class,
+                    TelbotVerifyCodeResponse.class,
                     Collections.emptyMap()
             );
 
@@ -150,6 +152,52 @@ public class UserServiceImpl implements UserService {
     public boolean isUserSubscribeOnCalendar(User user) {
         WflowUser wflowUser = findWflowUser(user);
         return wflowUser != null && wflowUser.getUserSettings() != null ? wflowUser.getUserSettings().getSubscribeOnCalendar() : false;
+    }
+
+    @Override
+    public boolean updateUserSettings(User user, String callbackData) {
+        Boolean updated = Boolean.FALSE;
+        UserSettings userSettings = findWflowUser(user).getUserSettings();
+
+        switch (callbackData) {
+            case CALLBACK_QUERY_TASKS_SUBSCRIBE:
+                userSettings.setSubscribeOnTasks(Boolean.TRUE);
+                break;
+            case CALLBACK_QUERY_TASKS_UNSUBSCRIBE:
+                userSettings.setSubscribeOnTasks(Boolean.FALSE);
+                break;
+            case CALLBACK_QUERY_CALENDAR_SUBSCRIBE:
+                userSettings.setSubscribeOnCalendar(Boolean.TRUE);
+                break;
+            case CALLBACK_QUERY_CALENDAR_UNSUBSCRIBE:
+                userSettings.setSubscribeOnCalendar(Boolean.FALSE);
+                break;
+        }
+
+        try {
+            TelbotUpdateUserSettingsRequest request = TelbotUpdateUserSettingsRequest
+                    .builder()
+                    .telUserId(user.getId())
+                    .userSettings(userSettings)
+                    .build();
+
+            ResponseEntity<Boolean> response = restTemplate.exchange(
+                    ApplicationConstants.API_SETTINGS_ENDPOINT,
+                    HttpMethod.PUT,
+                    new HttpEntity<>(request, sessionService.getJwtHeaders()),
+                    Boolean.class,
+                    Collections.emptyMap()
+            );
+
+            if (response.getBody() != null) {
+                updated = response.getBody();
+            }
+
+        } catch (HttpStatusCodeException e) {
+            logger.error(e.getMessage());
+        }
+
+        return updated;
     }
 
 

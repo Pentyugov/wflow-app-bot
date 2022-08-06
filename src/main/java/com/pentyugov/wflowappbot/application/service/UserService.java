@@ -16,5 +16,6 @@ public interface UserService {
     boolean isUserLoggedIn(Long userId);
     boolean isUserSubscribeOnTasks(User user);
     boolean isUserSubscribeOnCalendar(User user);
+    boolean updateUserSettings(User user, String callbackData);
 
 }

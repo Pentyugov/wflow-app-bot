@@ -1,9 +1,9 @@
 package com.pentyugov.wflowappbot.application.service;
 
-import com.pentyugov.wflowappbot.application.rest.payload.request.TelegramTaskSendMessageRequest;
+import com.pentyugov.wflowappbot.application.rest.payload.request.TelbotTaskSendMessageRequest;
 
 public interface MessageService {
     String NAME = "tel$MessageService";
 
-    void sendTaskMessage(TelegramTaskSendMessageRequest request);
+    void sendTaskMessage(TelbotTaskSendMessageRequest request);
 }

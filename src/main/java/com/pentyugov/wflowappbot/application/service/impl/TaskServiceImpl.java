@@ -2,8 +2,8 @@ package com.pentyugov.wflowappbot.application.service.impl;
 
 import com.pentyugov.wflowappbot.application.ApplicationConstants;
 import com.pentyugov.wflowappbot.application.model.WflowTask;
-import com.pentyugov.wflowappbot.application.rest.payload.request.TelegramGetTaskPageRequest;
-import com.pentyugov.wflowappbot.application.rest.payload.response.TelegramGetTaskPageResponse;
+import com.pentyugov.wflowappbot.application.rest.payload.request.TelbotGetTaskPageRequest;
+import com.pentyugov.wflowappbot.application.rest.payload.response.TelbotGetTaskPageResponse;
 import com.pentyugov.wflowappbot.application.service.SessionService;
 import com.pentyugov.wflowappbot.application.service.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -32,24 +32,24 @@ public class TaskServiceImpl implements TaskService {
     private final RestTemplate restTemplate;
     private final SessionService sessionService;
 
-    Map<User, TelegramGetTaskPageResponse> loadedUserTaskPages = new HashMap<>();
+    Map<User, TelbotGetTaskPageResponse> loadedUserTaskPages = new HashMap<>();
 
     @Override
     public List<WflowTask> getTaskPage(User user, Integer page) {
 
         List<WflowTask> result = Collections.emptyList();
-        TelegramGetTaskPageRequest request = TelegramGetTaskPageRequest.builder()
+        TelbotGetTaskPageRequest request = TelbotGetTaskPageRequest.builder()
                 .page(page)
                 .sortBy("createDate")
                 .telUserId(user.getId())
                 .build();
 
         try {
-            ResponseEntity<TelegramGetTaskPageResponse> response = restTemplate.exchange(
+            ResponseEntity<TelbotGetTaskPageResponse> response = restTemplate.exchange(
                     ApplicationConstants.API_GET_TASKS_PAGE_ENDPOINT,
                     HttpMethod.POST,
                     new HttpEntity<>(request, sessionService.getJwtHeaders()),
-                    TelegramGetTaskPageResponse.class,
+                    TelbotGetTaskPageResponse.class,
                     Collections.emptyMap()
             );
 
@@ -110,7 +110,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Integer getCurrentPageNumber(User user) {
-        TelegramGetTaskPageResponse response = loadedUserTaskPages.get(user);
+        TelbotGetTaskPageResponse response = loadedUserTaskPages.get(user);
         if (response != null)
             return response.getPage();
         return 0;

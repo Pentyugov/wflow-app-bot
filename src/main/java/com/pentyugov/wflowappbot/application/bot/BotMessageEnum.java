@@ -34,7 +34,7 @@ public enum BotMessageEnum {
     LOGIN_EMPTY("\u26D4 Не указано имя пользователя!\n" +
             "\u27A1 Для авторизации под пользователем системы Wflow-app наберите команду:\n /login {логин пользователя системы Wflow-app}"),
 
-    EXCEPTION_LOGIN("\u26D4 Что то пошло не так\n" +
+    EXCEPTION_("\u26D4 Что то пошло не так\n" +
             "Обратитесь к администратору системы"),
 
     TEMPLATE_TASK("\uD83D\uDCDD Задача №%s"),
@@ -70,6 +70,8 @@ public enum BotMessageEnum {
             "Воспользуйтесь клавиатурой, чтобы начать работу\uD83D\uDC47"),
 
     SETTINGS_MESSAGE("\uD83D\uDD27 Настройки"),
+
+    SETTINGS_UPDATED("\uD83D\uDD27 Настройки успешно обновлены"),
 
     MY_TASKS_MESSAGE("✅  Мои задачи"),
 

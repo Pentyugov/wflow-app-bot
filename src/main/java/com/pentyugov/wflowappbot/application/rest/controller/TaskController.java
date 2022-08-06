@@ -1,7 +1,7 @@
 package com.pentyugov.wflowappbot.application.rest.controller;
 
-import com.pentyugov.wflowappbot.application.rest.payload.request.TelegramTaskSendMessageRequest;
-import com.pentyugov.wflowappbot.application.rest.payload.response.TelegramTaskSendMessageResponse;
+import com.pentyugov.wflowappbot.application.rest.payload.request.TelbotTaskSendMessageRequest;
+import com.pentyugov.wflowappbot.application.rest.payload.response.TelbotTaskSendMessageResponse;
 import com.pentyugov.wflowappbot.application.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +23,9 @@ public class TaskController {
     }
 
     @PostMapping("/send")
-    public ResponseEntity<TelegramTaskSendMessageResponse> receiveOverdueTasks(@RequestBody TelegramTaskSendMessageRequest request) {
+    public ResponseEntity<TelbotTaskSendMessageResponse> receiveOverdueTasks(@RequestBody TelbotTaskSendMessageRequest request) {
         messageService.sendTaskMessage(request);
-        TelegramTaskSendMessageResponse response = new TelegramTaskSendMessageResponse();
+        TelbotTaskSendMessageResponse response = new TelbotTaskSendMessageResponse();
         response.setHttpStatus(HttpStatus.OK);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

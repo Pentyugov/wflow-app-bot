@@ -7,9 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TelegramLoginUserRequest {
+public class TelbotVerifyCodeRequest {
 
-    private String username;
     private Long telUserId;
-    private Long telChatId;
+    private String code;
 }

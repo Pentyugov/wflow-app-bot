@@ -2,7 +2,6 @@ package com.pentyugov.wflowappbot.application.bot.commands;
 
 import com.pentyugov.wflowappbot.application.bot.BotMessageEnum;
 import com.pentyugov.wflowappbot.application.bot.MessageMaker;
-import com.pentyugov.wflowappbot.application.bot.Utils;
 import com.pentyugov.wflowappbot.application.rest.payload.LoginException;
 import com.pentyugov.wflowappbot.application.service.UserService;
 import org.slf4j.Logger;
@@ -40,7 +39,7 @@ public class LoginCommand extends ServiceCommand {
 
                 } catch (LoginException e) {
                     logger.error(e.getMessage());
-                    answer = BotMessageEnum.EXCEPTION_LOGIN;
+                    answer = BotMessageEnum.EXCEPTION_;
                 }
 
             } else {
