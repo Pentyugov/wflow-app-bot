@@ -17,5 +17,5 @@ public interface UserService {
     boolean isUserSubscribeOnTasks(User user);
     boolean isUserSubscribeOnCalendar(User user);
     boolean updateUserSettings(User user, String callbackData);
-
+    boolean logout(Long telUserId);
 }

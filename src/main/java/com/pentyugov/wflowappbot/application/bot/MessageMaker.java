@@ -84,6 +84,17 @@ public class MessageMaker {
 
     }
 
+    public SendMessage createLogoutMessage(User user, Chat chat) {
+        boolean loggedOut = userService.logout(user.getId());
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(chat.getId()));
+        sendMessage.setText(loggedOut ? BotMessageEnum.LOGOUT_MESSAGE.getMessage() : BotMessageEnum.EXCEPTION_.getMessage());
+        sendMessage.enableMarkdown(true);
+        sendMessage.setReplyMarkup(keyboardMaker.getMainMenuKeyboard());
+        return sendMessage;
+    }
+
     private String generateFromTemplate(BotMessageEnum template, WflowTask task) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         return template.getMessage()
@@ -119,6 +130,7 @@ public class MessageMaker {
         return sendMessage;
     }
 
+    @Connected
     public SendMessage createNextMyTasksMessage(User user, Chat chat) {
         List<WflowTask> tasks = taskService.getNextTaskPage(user);
 

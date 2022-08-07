@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
@@ -93,6 +94,10 @@ public class Bot extends TelegramLongPollingCommandBot {
 
     public void sendConnectionRefusedMessage(Chat chat) {
         sendMessage(messageHandler.getNotConnectedToServerMessage(chat));
+    }
+
+    public void sendStartMessage(User user, Chat chat) {
+        sendMessage(messageHandler.getStartMessage(user, chat));
     }
 
 

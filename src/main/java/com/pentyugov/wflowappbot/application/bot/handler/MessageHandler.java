@@ -3,12 +3,12 @@ package com.pentyugov.wflowappbot.application.bot.handler;
 import com.pentyugov.wflowappbot.application.bot.BotMessageEnum;
 import com.pentyugov.wflowappbot.application.bot.MessageMaker;
 import com.pentyugov.wflowappbot.application.bot.keyboard.ButtonNameEnum;
-import com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardConstants;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 import static com.pentyugov.wflowappbot.application.bot.keyboard.InlineKeyboardConstants.CallbackQueryAction.*;
 
@@ -46,12 +46,19 @@ public class MessageHandler {
         return messageMaker.createNotConnectedToServerMessage(chat);
     }
 
+    public SendMessage getStartMessage(User user, Chat chat) {
+        return messageMaker.createStartMessage(user, chat);
+    }
+
     public SendMessage handleCallbackQuery(CallbackQuery callbackQuery) {
         if (CALLBACK_QUERY_TASKS_PREV.equals(callbackQuery.getData())) {
             return messageMaker.createPrevMyTasksMessage(callbackQuery.getFrom(), callbackQuery.getMessage().getChat());
         }
         if (CALLBACK_QUERY_TASKS_NEXT.equals(callbackQuery.getData())) {
             return messageMaker.createNextMyTasksMessage(callbackQuery.getFrom(), callbackQuery.getMessage().getChat());
+        }
+        if (CALLBACK_QUERY_LOGOUT.equals(callbackQuery.getData())) {
+            return messageMaker.createLogoutMessage(callbackQuery.getFrom(), callbackQuery.getMessage().getChat());
         }
         if (callbackQuery.getData().startsWith(CALLBACK_QUERY_TASK_COMMAND_PREFIX)) {
             String taskId = callbackQuery.getData().replace(CALLBACK_QUERY_TASK_COMMAND_PREFIX, "");

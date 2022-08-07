@@ -73,6 +73,8 @@ public enum BotMessageEnum {
 
     SETTINGS_UPDATED("\uD83D\uDD27 Настройки успешно обновлены"),
 
+    LOGOUT_MESSAGE("\uD83D\uDD27 Вы успешно вышли из системы"),
+
     MY_TASKS_MESSAGE("✅  Мои задачи"),
 
     TASK_PRIORITY_LOW("Низкий"),

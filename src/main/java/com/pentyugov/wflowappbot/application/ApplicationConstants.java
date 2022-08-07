@@ -12,6 +12,7 @@ public class ApplicationConstants {
     public static String API_SETTINGS_ENDPOINT;
     public static String API_AUTH_URL;
     public static String API_LOGIN_ENDPOINT;
+    public static String API_LOGOUT_ENDPOINT;
     public static String API_GET_LOGGED_USERS_ENDPOINT;
     public static String API_VERIFY_CODE_ENDPOINT;
     public static String API_GET_TASKS_BY_ID_ENDPOINT;
@@ -24,6 +25,7 @@ public class ApplicationConstants {
         ApplicationConstants.API_SETTINGS_ENDPOINT          = ApplicationConstants.API_URL + "/v1/telbot/settings";
         ApplicationConstants.API_CHECK_CONNECTION           = ApplicationConstants.API_URL + "/v1/telbot/check-connection";
         ApplicationConstants.API_LOGIN_ENDPOINT             = ApplicationConstants.API_URL + "/v1/telbot/login";
+        ApplicationConstants.API_LOGOUT_ENDPOINT             = ApplicationConstants.API_URL + "/v1/telbot/logout";
         ApplicationConstants.API_GET_LOGGED_USERS_ENDPOINT  = ApplicationConstants.API_URL + "/v1/telbot/logged-users";
         ApplicationConstants.API_VERIFY_CODE_ENDPOINT       = ApplicationConstants.API_URL + "/v1/telbot/verify-code";
         ApplicationConstants.API_GET_TASKS_BY_ID_ENDPOINT   = ApplicationConstants.API_URL + "/v1/telbot/tasks/%s";

@@ -2,6 +2,7 @@ package com.pentyugov.wflowappbot.application.bot.aspect;
 
 import com.pentyugov.wflowappbot.application.bot.Bot;
 import com.pentyugov.wflowappbot.application.service.SessionService;
+import com.pentyugov.wflowappbot.application.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -17,6 +18,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public class ConnectedAspect {
 
     private final SessionService sessionService;
+    private final UserService userService;
     private final Bot bot;
 
     @Pointcut(value = "@annotation(connected) && args(user, chat)", argNames = "connected,user,chat")
@@ -30,10 +32,13 @@ public class ConnectedAspect {
                          User user,
                          Chat chat) throws Throwable {
         if (sessionService.checkConnection()) {
-            return joinPoint.proceed();
+            if (userService.isUserLoggedIn(user)) {
+                return joinPoint.proceed();
+            }
+            bot.sendStartMessage(user, chat);
+        } else {
+            bot.sendConnectionRefusedMessage(chat);
         }
-
-        bot.sendConnectionRefusedMessage(chat);
         return null;
     }
 

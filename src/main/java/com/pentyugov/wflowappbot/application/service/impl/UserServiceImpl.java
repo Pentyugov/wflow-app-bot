@@ -200,5 +200,30 @@ public class UserServiceImpl implements UserService {
         return updated;
     }
 
+    @Override
+    public boolean logout(Long telUserId) {
+        boolean loggedOut = false;
+
+        try {
+
+            ResponseEntity<Boolean> response = restTemplate.exchange(
+                    ApplicationConstants.API_LOGOUT_ENDPOINT,
+                    HttpMethod.POST,
+                    new HttpEntity<>(telUserId, sessionService.getJwtHeaders()),
+                    Boolean.class,
+                    Collections.emptyMap()
+            );
+
+            if (response.getBody() != null) {
+                loggedOut = response.getBody();
+            }
+
+        } catch (HttpStatusCodeException e) {
+            logger.error(e.getMessage());
+        }
+
+        return loggedOut;
+    }
+
 
 }
