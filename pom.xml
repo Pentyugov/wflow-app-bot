@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.pentyugov</groupId>
 	<artifactId>wflow-telbot</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+<!--	<version>0.0.1-SNAPSHOT</version>-->
 	<name>wflow-telbot</name>
 	<description>Telbot application for Wflow-app</description>
 	<properties>
@@ -87,6 +87,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>wflow-bot</finalName>
 	</build>
 
 </project>
