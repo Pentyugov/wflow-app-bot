@@ -47,8 +47,6 @@ ____
 
     mvn clean package
 
-    java - jar ./target/wflow-ище.jar
-
-После запуска приложение регистрируется на Eureka server под именем `wflow-main-service`
+    java - jar ./target/wflow-bot.jar
 
 
